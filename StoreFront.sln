@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreFront.UI.MVC", "StoreFront.UI.MVC\StoreFront.UI.MVC.csproj", "{3B08F19A-BC7F-4E06-907B-DFF5C013F814}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreFront.DATA.EF", "StoreFront.DATA.EF\StoreFront.DATA.EF.csproj", "{5C173C13-A186-49A9-B0EE-EB63109059EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B08F19A-BC7F-4E06-907B-DFF5C013F814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B08F19A-BC7F-4E06-907B-DFF5C013F814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B08F19A-BC7F-4E06-907B-DFF5C013F814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B08F19A-BC7F-4E06-907B-DFF5C013F814}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C173C13-A186-49A9-B0EE-EB63109059EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C173C13-A186-49A9-B0EE-EB63109059EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C173C13-A186-49A9-B0EE-EB63109059EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C173C13-A186-49A9-B0EE-EB63109059EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B7F071B-DB0E-4064-9F87-1E75238E9D2C}
+	EndGlobalSection
+EndGlobal
