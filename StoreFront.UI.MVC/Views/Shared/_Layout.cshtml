@@ -1,50 +1,133 @@
-﻿<!DOCTYPE html>
+﻿@*
+    Added the two lines below to lock down certain nav items.
+    These are required to check the Authentication of a user (aka whether or not they are logged in)
+*@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using StoreFront.DATA.EF.Models
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - StoreFront.UI.MVC</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/StoreFront.UI.MVC.styles.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewData["Title"] | Hobbyshop</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <!--Datatables CSS-->
+    <link href="//cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!--Paged List Stlye-->
+    <link href="~/css/PagedList.css" rel="stylesheet" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">StoreFront.UI.MVC</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/">Hobbyshop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" asp-action="ListUsers" asp-controller="Administration">Users</a></li>
+                                <li><a class="dropdown-item" asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a asp-action="Index" asp-controller="Products" class="dropdown-item">Products</a></li>
+                                <li><a asp-action="Index" asp-controller="Orders" class="dropdown-item">Orders</a></li>
+                                <li><a asp-action="Index" asp-controller="UserDetails" class="dropdown-item">User Details</a></li>
+                                <li><a asp-action="Index" asp-controller="Suppliers" class="dropdown-item">Suppliers</a></li>
+                                <li><a asp-action="Index" asp-controller="ProductCategories" class="dropdown-item">Categories</a></li>
+                                <li><a asp-action="Index" asp-controller="Games" class="dropdown-item">Games</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+                    }
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a asp-action="TiledProducts" asp-controller="Products" class="dropdown-item">All Products</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                @{
+                    //Create a bool to determine if there are items in the cart
+                    bool cartHasProducts = false;
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - StoreFront.UI.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    //Create a variable to store the number of products
+                    int productCount = 0;
+
+                    //Check if the cart string exists in the Session
+                    if (!String.IsNullOrEmpty(Context.Session.GetString("cart")))
+                    {
+                        //If so, there are items in the cart -- flip the bool
+                        cartHasProducts = true;
+
+                        //Create the Dictionary to hold the cart items
+                        var products = new Dictionary<int, CartItemViewModel>();
+
+                        //Deserialize the Sessioncart and store it in the dictionary
+                        products = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(Context.Session.GetString("cart"));
+
+                        //Take the productCount and assign it the sum of the Qty of cart items
+                        productCount = products.Sum(p => p.Value.Qty);
+                    }
+                }
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a asp-action="Index" asp-controller="Orders" class="dropdown-item">Orders</a></li>
+                            <li><a asp-action="Index" asp-controller="UserDetails" asp-route-id="" class="dropdown-item">Account Details</a></li>
+                            <partial name="_LoginPartial" />
+                        </ul>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <a class="nav-link" asp-action="Index" asp-controller="ShoppingCart">
+
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">
+                            @productCount
+                        </span>
+                    </a>
+                </form>
+            </div>
         </div>
+    </nav>
+
+    @RenderSection("Header", false)
+
+    @RenderBody()
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Hobbyshop @DateTime.Now.Year</p></div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="~/js/scripts.js"></script>
+    <!-- jQuery -->
+    <script src="~/js/jquery-3.4.1.min.js"></script>
+    <!--Datatables.net-->
+    <script src="//cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    @RenderSection("Scripts", false)
+
 </body>
 </html>

@@ -1,0 +1,109 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Shop Products";
+}
+
+@section Header {
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">All Products</h1>
+                @if (User.IsInRole("Admin"))
+                {
+                    <p class="lead fw-normal text-white-50 mb-0"><a asp-action="Create">Create New Product</a></p>
+                }
+            </div>
+        </div>
+    </header>
+}
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.ProductId">@Html.DisplayFor(modelItem => item.ProductName)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductPrice)
+                </td>
+                <td>
+                    @if (item.ProductImg == null)
+                    {
+                        <img src="~/images/t_noimage.png" alt="No Image" class="img-fluid"/>
+                    }
+                    else
+                    {
+                        <img src="~/images/t_@item.ProductImg" alt="@item.ProductDescription" class="img-fluid" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.GameName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                </td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> @:|
+                        <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                        @*
+                        @if (item.IsDiscontinued == true && item.Inventory ==0 && item.UnitsOnOrder == 0)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                        }
+                        else
+                        {
+                            <a disabled="true" class="text-danger" style="text-decoration : line-through" title="Can't delete">Delete</a>
+                        }*@
+                        
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function() {
+
+            //Update the selector to target the element with the class of table
+            let table = new DataTable('.table');   
+        });
+
+     
+    </script>
+}

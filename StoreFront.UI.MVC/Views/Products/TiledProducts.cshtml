@@ -1,0 +1,103 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@*THIS MODEL IS UPDATED DUMMY - DO NOT FORGET TO UPDATE YOUR MODEL IT WILL NOT WORK YEET*@
+@model IPagedList<StoreFront.DATA.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Shop Products";
+}
+
+@section Header {
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">All Products</h1>
+            </div>
+        </div>
+    </header>
+}
+<section class="py-5">
+    <div class="row">
+
+        @*
+        Implenmenting Search:
+
+        -Add a <form>
+        -Add an <input> textbox to the <form>
+        -Add an <input> submission to the <form>
+        -Add an if() to display the number of results and the search term
+        -Add the search logic to the Controller Action
+        *@
+
+        <div class="col-sm-6 offset-3">
+            <form asp-action="TiledProducts" method="get">
+                <label for="categoryId" class="custom-control-label d-block text-center">
+                    Filter by Category
+                </label>
+                <select name="categoryId" class="form-control text-center mb-3" asp-items="ViewBag.CategoryId">
+                    <option value="0">[Choose a Category]</option>
+                </select>
+                <label for="gameId" class="custom-control-label d-block text-center">
+                    Filter by Game
+                </label>
+                <select name="gameId" class="form-control text-center mb-3" asp-items="ViewBag.GameId">
+                    <option value="0">[Choose a Game]</option>
+                </select>
+                <input type="text" name="searchTerm" class="form-control text-center" placeholder="Search Gadgets..." />
+
+                <input type="submit" value="Search" class="btn btn-primary text-center w-50 d-block mt-3 offset-3" />
+
+            </form>
+
+            @if (ViewBag.NbrResults != null)
+            {
+                <p class="mt-5 p-2 alert alert-warning text-center">
+                    Showing @ViewBag.NbrResults result@(ViewBag.NbrResults > 1 ? "s" : "") for 'ViewBag.SearchTerm'...
+                </p>
+            }
+
+        </div>
+
+    </div>
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var item in Model)
+            {
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" src=~/images/@item.ProductImg alt="@item.ProductDescription" />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder"><a asp-action="Details" asp-route-id="@item.ProductId" class="option1">@item.ProductName</a></h5>
+                                <!-- Product price-->
+                            @Html.DisplayFor(modelItem => item.ProductPrice)
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="btn btn-outline-dark mt-auto">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row mt-5">
+            <div class="w-50 mx-auto text-center">
+
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                <div class="w-100">
+                    @Html.PagedListPager(Model, page => Url.Action("TiledProducts", new {page, searchTerm = ViewBag.SearchTerm, categoryId = ViewBag.Category, gameId = ViewBag.Game}))
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
