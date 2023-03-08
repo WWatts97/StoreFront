@@ -7,7 +7,7 @@ namespace StoreFront.DATA.EF.Models
     {
         public UserDetail()
         {
-            Orders = new HashSet<Orders>();
+            Orders = new HashSet<Order>();
         }
 
         public string UserId { get; set; } = null!;
@@ -20,6 +20,6 @@ namespace StoreFront.DATA.EF.Models
         public string? Phone { get; set; }
         public string? Email { get; set; }
 
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
