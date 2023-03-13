@@ -81,6 +81,14 @@ namespace StoreFront.UI.MVC.Controllers
             return View(products.ToPagedList(page, pageSize));
         }
 
+        public async Task<IActionResult> PopularProducts()
+        {
+            var products = _context.Products
+                .Include(p => p.Category).Include(p => p.Game).Include(p => p.Supplier)
+                .OrderBy(p => p.UnitsOnOrder).ToList();
+            return View(await products.Take(8).ToListAsync());
+        }
+
         // GET: Products/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
@@ -106,6 +114,7 @@ namespace StoreFront.UI.MVC.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+
             ViewData["CategoryId"] = new SelectList(_context.ProductCategories, "CategoryId", "CategoryName");
             ViewData["GameId"] = new SelectList(_context.Games, "GameId", "GameName");
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "SupplierId", "SupplierName");
@@ -163,7 +172,7 @@ namespace StoreFront.UI.MVC.Controllers
                 {
                     //in this case no file was uploaded, so assign a default file name
                     //IF YOU HAVEN'T ALREADY, GET THE DEFAULT FILE
-                    product.ProductImg = "noimage.png";
+                    product.ProductImg = "NoImage.png";
                 }
                 #endregion
 
@@ -236,7 +245,7 @@ namespace StoreFront.UI.MVC.Controllers
                         string fullPath = webRootPath + "/images/";
 
                         //Delete the old image
-                        if (oldImageName != "noimage.png")
+                        if (oldImageName != "NoImage.png")
                         {
                             ImageUtility.Delete(fullPath, oldImageName);
                         }
@@ -314,11 +323,15 @@ namespace StoreFront.UI.MVC.Controllers
                 return Problem("Entity set 'GadgetStoreContext.Products'  is null.");
             }
             var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            if (product != null && product.ProductImg != "NoImage.png")
             {
                 string webRootPath = _webHostEnvironment.WebRootPath;
                 string fullImagePath = webRootPath + "/images/";
                 ImageUtility.Delete(fullImagePath, product.ProductImg);
+                _context.Products.Remove(product);
+            }
+            else
+            {
                 _context.Products.Remove(product);
             }
 

@@ -24,7 +24,6 @@ namespace StoreFront.DATA.EF.Models
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; } = null!;
         public virtual DbSet<Game> Games { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<OrderProdcut> OrderProdcuts { get; set; } = null!;
         public virtual DbSet<OrderProduct> OrderProducts { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductCategory> ProductCategories { get; set; } = null!;
@@ -36,7 +35,7 @@ namespace StoreFront.DATA.EF.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("server=.\\sqlexpress;database=hobbyshop;trusted_connection=true;multipleactiveresultsets=true;");
+                optionsBuilder.UseSqlServer("Server=.\\sqlexpress;Database=Hobbyshop;Trusted_Connection=True;MultipleActiveResultSets=true;");
             }
         }
 
@@ -173,19 +172,6 @@ namespace StoreFront.DATA.EF.Models
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Orders__UserID__477199F1");
-            });
-
-            modelBuilder.Entity<OrderProdcut>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.OrderProductId).HasColumnName("OrderProductID");
-
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.Property(e => e.ProductPrice).HasColumnType("money");
             });
 
             modelBuilder.Entity<OrderProduct>(entity =>

@@ -69,7 +69,7 @@ namespace GadgetStore.UI.MVC.Utilities
         {
             //VERY IMPORTANT - if you have a default file for your uploads, don't let it be deleted!
             ////**Update this filename below to the name in use**
-            //if (fileName.ToLower() == "noimage.png")
+            //if (fileName.ToLower() == "NoImage.png")
             //{
             //    return;
             //}

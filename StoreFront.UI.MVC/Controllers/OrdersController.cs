@@ -59,7 +59,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Orders Orders)
+        public async Task<IActionResult> Create([Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Order Orders)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Orders Orders)
+        public async Task<IActionResult> Edit(int id, [Bind("OrderId,UserId,OrderDate,ShipToName,ShipCity,ShipState,ShipZip")] Order Orders)
         {
             if (id != Orders.OrderId)
             {
