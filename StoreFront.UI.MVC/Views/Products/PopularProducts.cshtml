@@ -1,0 +1,47 @@
+﻿@*THIS MODEL IS UPDATED DUMMY - DO NOT FORGET TO UPDATE YOUR MODEL IT WILL NOT WORK YEET*@
+@model IEnumerable<StoreFront.DATA.EF.Models.Product>
+
+@{
+    ViewData["Title"] = "Popular Products";
+}
+
+@section Header {
+        <!-- Header-->
+        <header class="bg-dark py-5 " style="    background-image: url(/assets/d3cbafu-6fdedbb3-cc88-41d7-b403-3c94163b1480.jpg) !important;">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Popular Products</h1>
+                </div>
+            </div>
+        </header>
+}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            @foreach (var item in Model)
+            {
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src=~/images/@item.ProductImg alt="@item.ProductDescription" />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder"><a asp-action="Details" asp-route-id="@item.ProductId" class="option1">@item.ProductName</a></h5>
+                                    <!-- Product price-->
+                            @Html.DisplayFor(modelItem => item.ProductPrice)
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.ProductId" class="btn btn-outline-dark mt-auto">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
+    </div>
+</section>

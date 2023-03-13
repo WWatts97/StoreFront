@@ -4,39 +4,42 @@
     ViewData["Title"] = "Games";
 }
 @section Header {
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Games</h1>
+    <!-- Header-->
+    <header class="bg-dark py-5 " style="    background-image: url(/assets/d3cbafu-6fdedbb3-cc88-41d7-b403-3c94163b1480.jpg) !important;">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder">Games</h1>
                 @if (User.IsInRole("Admin"))
                 {
-                            <p class="lead fw-normal text-white-50 mb-0"><a asp-action="Create">Create New Game</a></p>
+                    <p class="lead fw-normal text-white-50 mb-0"><a asp-action="Create">Create New Game</a></p>
                 }
-                </div>
             </div>
-        </header>
+        </div>
+    </header>
 }
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GameName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.GameName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.GameName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GameName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
