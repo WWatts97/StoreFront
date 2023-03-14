@@ -18,7 +18,7 @@
     <meta name="author" content="" />
     <title>@ViewData["Title"] | Will's Game Lounge</title>
     <!-- Favicon-->
-    <link rel="icon" type="image/x-icon" href="assets/Shop_Logo_Final_Joystix_Font.jpg" />
+    <link rel="icon" type="image/x-icon" href="~/assets/Shop_Logo_Final_Joystix_Font.jpg" />
     <!-- Bootstrap icons-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
@@ -62,7 +62,6 @@
                             <li><a asp-action="TiledProducts" asp-controller="Products" class="dropdown-item">All Products</a></li>
                             <li><hr class="dropdown-divider" /></li>
                             <li><a asp-action="PopularProducts" asp-controller="Products" class="dropdown-item">Popular Products</a></li>
-                            <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
                         </ul>
                     </li>
                     
@@ -94,8 +93,6 @@
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a asp-action="Index" asp-controller="Orders" class="dropdown-item">Orders</a></li>
-                            <li><a asp-action="Index" asp-controller="UserDetails" asp-route-id="" class="dropdown-item">Account Details</a></li>
                             <partial name="_LoginPartial" />
                         </ul>
                     </li>

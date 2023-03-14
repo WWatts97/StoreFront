@@ -19,8 +19,14 @@
     </header>
 }
 
+<div class="row">
+    <div class="offset-3 col-md-6">
+        <div id="MessageContent" class="text-center"></div>
+    </div>
+</div>
+
 <div class="container">
-    <table class="table">
+    <table class="table"id="CategoriesTable">
         <thead>
             <tr>
                 <th>
@@ -35,7 +41,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr id="Category-@item.CategoryId">
                     <td>
                         @Html.DisplayFor(modelItem => item.CategoryName)
                     </td>
@@ -44,10 +50,32 @@
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                        <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+                        <a data-ajax="true" data-ajax-confirm="Are you sure you want to delete @item.CategoryName?" data-ajax-failure="deleteFailed" data-ajax-success="deleteConfirmed" data-ajax-method="POST" href="~/ProductCategories/AjaxDelete/@item.CategoryId">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        function deleteConfirmed(response, status, data) {
+            //Remove the category's row from the table
+            let rowId = "#Category-" + response.id;
+            console.log(rowId)
+            $("#CategoriesTable").find(rowId).remove();
+
+            //Display a status message
+            $("#MessageContent").html("<div class='alert alert-success'>" + response.message + "</div>");
+
+        }
+
+        function deleteFailed(response, status, data) {
+
+            //Display a status message
+            $("#MessageContent").html("<div class='alert alert-danger'>Delete unsuccessful.</div>");
+
+        }
+    </script>
+}

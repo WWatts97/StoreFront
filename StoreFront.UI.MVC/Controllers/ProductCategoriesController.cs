@@ -45,6 +45,7 @@ namespace StoreFront.UI.MVC.Controllers
             return View(productCategory);
         }
 
+
         // GET: ProductCategories/Create
         public IActionResult Create()
         {
@@ -134,6 +135,16 @@ namespace StoreFront.UI.MVC.Controllers
             }
 
             return View(productCategory);
+        }
+
+        public JsonResult AjaxDelete(int id)
+        {
+            ProductCategory category = _context.ProductCategories.Find(id);
+            _context.ProductCategories.Remove(category);
+            _context.SaveChanges();
+
+            string confirmMessage = $"Deleted the category, {category.CategoryName}, from the database.";
+            return Json(new { id = id, message = confirmMessage });
         }
 
         // POST: ProductCategories/Delete/5
