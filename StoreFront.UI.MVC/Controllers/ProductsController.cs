@@ -89,6 +89,13 @@ namespace StoreFront.UI.MVC.Controllers
             return View(await products.Take(8).ToListAsync());
         }
 
+        [AllowAnonymous]
+        public PartialViewResult ProductDetails(int id)
+        {
+            var product = _context.Products.Find(id);
+            return PartialView(product);
+        }
+
         // GET: Products/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)

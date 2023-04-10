@@ -73,7 +73,9 @@
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Product name-->
-                                <h5 class="fw-bolder"><a asp-action="Details" asp-route-id="@item.ProductId" class="option1">@item.ProductName</a></h5>
+                                <h5 class="fw-bolder">
+                                    <button type="button" class="DetailsLink btn btn-link" id="@item.ProductId" data-bs-target="#ProductDetails" data-bs-toggle="modal">@item.ProductName</button>
+                                </h5>
                                 <!-- Product price-->
                             @Html.DisplayFor(modelItem => item.ProductPrice)
                             </div>
@@ -101,3 +103,36 @@
         </div>
     </div>
 </section>
+
+@*
+    Modal for AJAX Details
+*@
+<div class="modal fade" id="ProductDetails" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Details</h5>
+            </div>
+
+            <div class="modal-body" id="DetailsBody">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(".DetailsLink").on("click", function (e) {
+            let catId = $(this).attr("id");
+            console.log(catId)
+            $("#ProductDetails .modal-body").load("/Products/ProductDetails/" + catId);
+        });
+    </script>
+}
