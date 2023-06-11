@@ -22,7 +22,7 @@
 <div class="container">
     <table class="table">
         <thead>
-            <tr>
+            <tr class="text-center">
                 <th>
                     @Html.DisplayNameFor(model => model.ProductName)
                 </th>
@@ -47,7 +47,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="text-center">
                     <td>
                         <a asp-action="Details" asp-route-id="@item.ProductId">@Html.DisplayFor(modelItem => item.ProductName)</a>
                     </td>
